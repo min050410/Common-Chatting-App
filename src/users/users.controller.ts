@@ -1,7 +1,8 @@
-import { Get, Body, Controller, Post, Query } from '@nestjs/common';
+import { Param, Get, Body, Controller, Post, Query } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
+import { UserInfo } from './UserInfo';
 import { UsersService } from './users.service';
 
 
@@ -31,10 +32,10 @@ export class UsersController {
         
         return await this.usersService.login(email, password);
     }
-
-    // 환경변수 불러오기 test
-    @Get('/env')
-    getHello(): string {
-        return process.env.DATABASE_HOST;
+    
+    @Get('/:id')
+    async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
+        return await this.usersService.getUserInfo(userId);
     }
+
 }
