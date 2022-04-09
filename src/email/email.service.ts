@@ -1,6 +1,7 @@
 import Mail = require('nodemailer/lib/mailer');
 import * as nodemailer from 'nodemailer';
 import { Injectable } from '@nestjs/common';
+import { EmailInfo } from './email-info';
 
 interface EmailOptions {
     to: string,
@@ -17,8 +18,8 @@ export class EmailService {
         this.transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'YOUR_GMAIL', // todo:: config
-                pass: 'YOUR_PASSWORD' // todo:: config
+                user: EmailInfo.user, // todo:: config
+                pass: EmailInfo.pass // todo:: config
             }
         });
     }
