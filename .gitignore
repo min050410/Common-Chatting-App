@@ -2,6 +2,9 @@
 /dist
 /node_modules
 /src/email/email-info.ts
+/.development.env
+/.production.env
+/.stage.env
 
 # Logs
 logs

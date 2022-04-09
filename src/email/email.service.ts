@@ -18,8 +18,8 @@ export class EmailService {
         this.transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: EmailInfo.user, // todo:: config
-                pass: EmailInfo.pass // todo:: config
+                user: EmailInfo.user, 
+                pass: EmailInfo.pass 
             }
         });
     }
