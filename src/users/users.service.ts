@@ -1,30 +1,36 @@
 import * as uuid from 'uuid';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { EmailService } from 'src/email/email.service';
 import { UserInfo } from './UserInfo';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { ulid } from 'ulid';
 
 @Injectable()
 export class UsersService { 
-    constructor(private emailService: EmailService,
+    constructor(
+        private emailService: EmailService,
         @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
-        ) { }
+        private connection: Connection,
+      ) { }
 
     async createUser(name: string, email: string, password: string) {
+        const userExist = await this.checkUserExists(email);
+        if (userExist) {
+            throw new UnprocessableEntityException('해당 이메일로는 가입할 수 없습니다.');
+        }
         await this.checkUserExists(email);
 
         const signupVerifyToken = uuid.v1();
 
         await this.saveUser(name, email, password, signupVerifyToken);
         await this.sendMemberJoinEmail(email, signupVerifyToken);
-
     }
 
-    private checkUserExists(email: string) {
-        return false; // todo::DB 연동 후 구현
+    private async checkUserExists(emailAddress: string): Promise<boolean> {
+        const user = await this.usersRepository.findOneBy({ email: emailAddress });
+        return user !== undefined; // user가 없으면 0 있으면 1
     }
 
     private async saveUser(name: string, email: string, password: string, signupVerifyToken: string){

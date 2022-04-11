@@ -22,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: process.env.DATABASE_PASSWORD,
       database: 'test',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE),
     }),
   ],
   controllers: [],
