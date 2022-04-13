@@ -1,16 +1,15 @@
-import { Param, Get, Body, Controller, Post, Query } from '@nestjs/common';
+import { Param, Get, Body, Controller, Post, Query, Headers } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserInfo } from './UserInfo';
 import { UsersService } from './users.service';
-
-
-// 회원가입 인터페이스 구현
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('users')
 export class UsersController {
-    constructor( private usersService: UsersService) { }
+    constructor(private usersService: UsersService,
+                private authService: AuthService) { }
 
     @Post()
     async createUser(@Body() dto: CreateUserDto): Promise<void> {
@@ -33,9 +32,15 @@ export class UsersController {
         return await this.usersService.login(email, password);
     }
     
-    @Get('/:id')
-    async getUserInfo(@Param('id') userId: string): Promise<UserInfo> {
-        return await this.usersService.getUserInfo(userId);
+    @Get('/youngmin')
+    async getUserInfo(@Headers() headers: any): Promise<UserInfo> {
+        // 헤더에서 jwt 파싱
+        const jwtString = headers.authorization.split('Bearer ')[1];
+
+        // this.authService.verify(jwtString);
+
+        // jwt verify로 userId 구하고, db에서 찾기
+        return await this.usersService.getUserInfo(this.authService.verify(jwtString).userId);
     }
 
 }

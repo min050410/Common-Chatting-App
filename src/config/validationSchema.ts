@@ -9,5 +9,7 @@ export const validationSchema = Joi.object({
         .required(),
     EMAIL_BASE_URL: Joi.string()
         .required()
-        .uri()
+        .uri(),
+    JWT_SECRET: Joi.string()
+    .required()
 });
