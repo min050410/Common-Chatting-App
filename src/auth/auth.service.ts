@@ -14,9 +14,7 @@ interface User {
 @Injectable()
 export class AuthService {
   constructor(
-    // 알 수 없는 버그로 auth configModule이 작동이 안됨
-    @Inject(emailConfig.KEY) private config: ConfigType<typeof emailConfig>,
-    // @Inject(authConfig.KEY) private config: ConfigType<typeof authConfig>,
+    @Inject(authConfig.KEY) private config: ConfigType<typeof authConfig>,
   ) { }
 
   login(user: User) {
