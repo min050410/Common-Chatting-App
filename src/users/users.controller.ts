@@ -11,7 +11,7 @@ import { LoggerService } from '@nestjs/common';
 @Controller('users')
 export class UsersController {
     constructor(private usersService: UsersService,
-                @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService) { }
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService) { }
 
     @Post()
     async createUser(@Body() dto: CreateUserDto): Promise<void> {
@@ -31,21 +31,21 @@ export class UsersController {
     @Post('/login')
     async login(@Body() dto: UserLoginDto): Promise<string> {
         const { email, password } = dto;
-        
+
         return await this.usersService.login(email, password);
     }
-    
+
     @UseGuards(AuthGuard)
     @Get(':id')
     async getUserInfo(@Headers() headers: any, @Param('id') userId: string): Promise<UserInfo> {
         return await this.usersService.getUserInfo(userId);
     }
 
-    private printLoggerServiceLog(dto: any){
+    private printLoggerServiceLog(dto: any) {
         try {
             throw new InternalServerErrorException('test');
         } catch (e) {
-            this.logger.error('errer: '+ JSON.stringify(dto), e.stack);
+            this.logger.error('errer: ' + JSON.stringify(dto), e.stack);
         }
         this.logger.warn('warn: ' + JSON.stringify(dto));
         this.logger.log('log: ' + JSON.stringify(dto));

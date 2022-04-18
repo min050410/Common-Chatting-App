@@ -10,15 +10,21 @@ import {
   utilities as nestWinstonModuleUtilities,
   WinstonModule,
 } from 'nest-winston';
+import { PostService } from './post/post.service';
+import { PostModule } from './post/post.module';
 @Module({
   imports: [
     UsersModule,
+    
+    // 환경변수 설정
     ConfigModule.forRoot({
       envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
       load: [emailConfig, authConfig],
       isGlobal: true,
       validationSchema,
     }),
+    
+    // typeormMoudule 관련 설정
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -29,6 +35,8 @@ import {
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE),
     }),
+
+    // logger 설정
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -43,9 +51,10 @@ import {
         }),
       ],
     }),
+    PostModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [PostService],
 })
 
 export class AppModule { }
