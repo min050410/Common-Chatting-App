@@ -18,7 +18,7 @@ export class UsersController {
         this.printLoggerServiceLog(dto);
         const { name, email, password } = dto;
         await this.usersService.createUser(name, email, password);
-        console.log(dto);
+        this.logger.log('사용자가 생성되었습니다...\n' + dto);
     }
 
     @Post('/email-verify')
@@ -31,7 +31,8 @@ export class UsersController {
     @Post('/login')
     async login(@Body() dto: UserLoginDto): Promise<string> {
         const { email, password } = dto;
-
+        
+        this.logger.log(this.usersService.getName(email, password) + '이 로그인 하였습니다.');
         return await this.usersService.login(email, password);
     }
 

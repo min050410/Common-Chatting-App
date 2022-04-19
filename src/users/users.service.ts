@@ -121,6 +121,13 @@ export class UsersService {
     });
   }
 
+
+  // id pasword로 이름을 찾아 리턴해주는 함수
+  async getName(email: string, password: string): Promise<string> {
+    const user = await this.usersRepository.findOneBy({ email, password });
+    return user.name;
+  }
+
   async getUserInfo(userId: string): Promise<UserInfo> {
     const user = await this.usersRepository.findOneBy({ id: userId });
 
