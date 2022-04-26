@@ -1,9 +1,11 @@
 import { Entity, PrimaryColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
+
 @Entity('board')
 export class BoardEntity {
-
-    @PrimaryColumn()
+    
+    // 자동으로 1씩 증가하는 값
+    @PrimaryGeneratedColumn()
     id: number;
 
     // 외래 키
