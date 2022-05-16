@@ -17,28 +17,24 @@ export class UsersService {
     private authService: AuthService,
   ) { }
 
-  async createUser(name: string, email: string, password: string) {
+  async createUser(name: string, email: string, password: string): Promise<void> {
     const userExist = await this.checkUserExists(email);
     if (userExist) {
       throw new UnprocessableEntityException('해당 이메일로는 가입할 수 없습니다.');
     }
-
     const signupVerifyToken = uuid.v1();
-
     // await this.saveUser(name, email, password, signupVerifyToken);
     // await this.saveUserUsingQueryRunner(name, email, password, signupVerifyToken);
     await this.saveUserUsingTransaction(name, email, password, signupVerifyToken);
-
     await this.sendMemberJoinEmail(email, signupVerifyToken);
   }
 
   private async checkUserExists(emailAddress: string): Promise<boolean> {
     const user = await this.usersRepository.findOneBy({ email: emailAddress });
-
     return user !== undefined;
   }
 
-  private async saveUser(name: string, email: string, password: string, signupVerifyToken: string) {
+  private async saveUser(name: string, email: string, password: string, signupVerifyToken: string): Promise<void> {
     const user = new UserEntity();
     user.id = ulid();
     user.name = name;
@@ -48,7 +44,7 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  private async saveUserUsingQueryRunner(name: string, email: string, password: string, signupVerifyToken: string) {
+  private async saveUserUsingQueryRunner(name: string, email: string, password: string, signupVerifyToken: string): Promise<void> {
     const queryRunner = this.connection.createQueryRunner();
 
     await queryRunner.connect();

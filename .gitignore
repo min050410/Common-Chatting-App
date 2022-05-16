@@ -2,6 +2,10 @@
 nest_study/dist
 nest_study/node_modules
 nest_study/src/config/env/
+board/dist
+board/node_modules
+chat/dist
+chat/node_modules
 
 # Logs
 logs
@@ -18,6 +22,12 @@ lerna-debug.log*
 # Tests
 nest_study/coverage
 nest_study/.nyc_output
+
+board/coverage
+board/.nyc_output
+
+chat/coverage
+chat/.nyc_output
 
 # IDEs and editors
 /.idea
