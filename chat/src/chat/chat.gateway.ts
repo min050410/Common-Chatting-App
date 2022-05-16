@@ -4,7 +4,7 @@ import { WebSocketGateway,
         OnGatewayConnection,
         OnGatewayDisconnect, } from '@nestjs/websockets';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: any;
     users: number = 0;
